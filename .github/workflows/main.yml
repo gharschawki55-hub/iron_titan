@@ -21,8 +21,9 @@ jobs:
       - name: Build APK
         run: |
           cd project
-          find . -name "pubspec.yaml" | head -1
           cd $(dirname $(find . -name "pubspec.yaml" | head -1))
+          sed -i "s/flutter_launcher_icons: \^0.13.3/flutter_launcher_icons: ^0.14.4/" pubspec.yaml
+          flutter pub upgrade flutter_launcher_icons
           flutter pub get
           flutter build apk --release
       - name: Upload APK
