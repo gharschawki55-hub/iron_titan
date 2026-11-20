@@ -22,7 +22,11 @@ jobs:
           cd project
           APP_DIR=$(dirname $(find . -name "pubspec.yaml" | head -1))
           cd $APP_DIR
+          cat pubspec.yaml
           sed -i "s/flutter_launcher_icons: \^0.13.3/flutter_launcher_icons: ^0.14.4/" pubspec.yaml || true
+          sed -i "s/google_mobile_ads: \^.*/google_mobile_ads: ^6.0.0/" pubspec.yaml || true
+          sed -i "s/google_mobile_ads: .*/google_mobile_ads: ^6.0.0/" pubspec.yaml || true
+          flutter pub upgrade --major-versions
           flutter pub get
           echo "Creating missing android folder..."
           flutter create . --platforms=android --org com.irontitan.app --project-name iron_titan
