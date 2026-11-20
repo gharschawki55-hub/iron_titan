@@ -13,8 +13,6 @@ jobs:
       - name: Unzip project
         run: |
           unzip -o iron_titan_full_project.zip -d project
-          find project -type d -name android
-          ls -R project | head -n 300
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -24,14 +22,11 @@ jobs:
           cd project
           APP_DIR=$(dirname $(find . -name "pubspec.yaml" | head -1))
           cd $APP_DIR
-          echo "IN $APP_DIR"
-          ls -la
-          ls -la platform || true
           sed -i "s/flutter_launcher_icons: \^0.13.3/flutter_launcher_icons: ^0.14.4/" pubspec.yaml || true
           flutter pub get
-          if [ -d "platform/android" ]; then echo "Found platform/android, copying"; cp -r platform/android ./android; fi
-          if [ -d "platform" ]; then ls -R platform | head -n 100; fi
-          ls -la
+          echo "Creating missing android folder..."
+          flutter create . --platforms=android --org com.irontitan.app --project-name iron_titan
+          flutter pub get
           flutter build apk --release
       - name: Upload APK
         uses: actions/upload-artifact@v4
